@@ -1,0 +1,4 @@
+implement toupper for polish characters
+change book constructor based on number of given arguments while adding a book (use book builder)
+figure out how to send an updated database to each connected client and how to create a listener thread for client that will recieve database updates
+code cleanup
