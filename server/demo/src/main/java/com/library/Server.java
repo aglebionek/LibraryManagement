@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class Server {
     static HashMap<Integer, Book> booksDictionary = new HashMap<>();
     static int highestBookId = 0;
-    static DatabaseType databaseType = DatabaseType.json;
+    static DatabaseType databaseType = DatabaseType.csv;
     static String commandsFilename = "commands";
     static String commands = "";
 
@@ -27,7 +27,12 @@ public class Server {
         System.out.println(serverSocket.getInetAddress());
 
         booksDictionary = ReadingDatabase.readBooksDictionary(databaseType);
-        highestBookId = Collections.max(booksDictionary.keySet());
+        System.out.println(booksDictionary);
+        try {
+            highestBookId = Collections.max(booksDictionary.keySet());
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
         commands = readCommandsFromFile();    
     
         System.out.println("Server waiting for client on port " + serverSocket.getLocalPort());
