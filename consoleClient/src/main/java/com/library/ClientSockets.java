@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 
-public final class Client {
+public final class ClientSockets {
     
     // method for getting input from the user
     private static String getCommand(BufferedReader input, String prompt) {
@@ -43,7 +43,7 @@ public final class Client {
         String response = "";
 
         System.out.println(startMessage);
-        while (true) {
+        while (!server.isClosed()) {
             command = getCommand(commandInput, commandPrompt);
             if (command.equals("exit")) {
                 out.println(command);
@@ -51,6 +51,9 @@ public final class Client {
                 server.close();
                 break;
             } else if (command.startsWith("all")){
+                out.println(command);
+                out.flush(); 
+                booksDictionary = (HashMap<Integer, Book>) objIn.readObject();
                 Printing.printAllBooks(booksDictionary, command);
             } else if (command.startsWith("help")) {
                 out.println(command);

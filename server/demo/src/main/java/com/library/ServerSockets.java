@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class Server {
+public class ServerSockets {
     static HashMap<Integer, Book> booksDictionary = new HashMap<>();
     static int highestBookId = 0;
     static DatabaseType databaseType = DatabaseType.csv;
@@ -38,7 +38,7 @@ public class Server {
         System.out.println("Server waiting for client on port " + serverSocket.getLocalPort());
         do {
             Socket connected = serverSocket.accept();
-            new Server.clientThread(connected).start();
+            new ServerSockets.clientThread(connected).start();
         } while (true);
     }
 
@@ -201,6 +201,13 @@ public class Server {
                         } catch (Exception e) {
                             System.out.println("No book with id " + command + " was found.");
                         }
+                        try {
+                            sendBooksDictionaryToClient(objOut, booksDictionary);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    } else if (command.startsWith("all")) {
                         try {
                             sendBooksDictionaryToClient(objOut, booksDictionary);
                         } catch (IOException e) {

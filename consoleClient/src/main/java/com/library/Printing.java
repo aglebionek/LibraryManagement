@@ -36,7 +36,7 @@ public class Printing {
             
         }
         printBooks(sorted);
-   }
+    }
 
     public static void printBooks(HashMap<Integer, Book> books) {
         printLine(idColumnName, titleColumnName, authorColumnName, publisherColumnName, statusColumnName);
@@ -49,16 +49,12 @@ public class Printing {
     }
 
     private static void printLine(String id, String title, String author, String publisher, String status) {
-        printStringOfLength(id, idColumnLength);
-        System.out.print("|");
-        printStringOfLength(title, stringColumnLength);
-        System.out.print("|");
-        printStringOfLength(author, stringColumnLength);
-        System.out.print("|");
-        printStringOfLength(publisher, stringColumnLength);
-        System.out.print("|");
-        printStringOfLength(status, statusColumnLength);
-        System.out.print("|\n");
+        System.out.println(
+            String.format(
+            "%1$-" + idColumnLength + "s|%2$-" + stringColumnLength + "s|%3$-" + stringColumnLength +
+            "s|%4$-" + stringColumnLength + "s|%5$-" + statusColumnLength+ "s|", id, title, author, publisher, status
+            )
+        );
     }
 
     private static void printStringOfLength(String string, int length) {

@@ -4,6 +4,5 @@ all [id | title | author | publisher | status] - get all books sorted by given a
 return [id] - return book to library
 borrow [id] - borrow book from library
 exit - exit from console
-status [id] - check if book is available
 remove [id] - remove book from database
 help - display these commands
