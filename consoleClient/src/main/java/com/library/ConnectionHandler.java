@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.Map;
@@ -22,11 +23,11 @@ public class ConnectionHandler {
         URL = url;
     }
 
-    public HttpURLConnection establishConnection(Map<String, String> params) throws IOException {
+    public HttpURLConnection establishConnection(Map<String, String> params, Method method) throws IOException {
         URL urlToConnect = new URL(URL + "?" + getParamsString(params));
         connection = (HttpURLConnection) urlToConnect.openConnection();
         connection.setRequestProperty("Content-Type", "text/plain");
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(method.toString());
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
@@ -75,7 +76,11 @@ public class ConnectionHandler {
         return connection.getInputStream();
     }
 
+    public OutputStream getOutputStream() throws IOException {
+        return connection.getOutputStream();
+    }
+
     public void disconnect() {
         connection.disconnect();
-    }
+    }    
 }

@@ -2,6 +2,7 @@ package com.library;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +20,8 @@ POST
             */
 
 public class ClientHttp {
+    private static final String URL = "http://localhost:8000/test";
+    private static final String COMMAND_PROMPT = ">>";
 
     // method for getting input from the user
     private static String getCommand(BufferedReader input, String prompt) {
@@ -32,26 +35,41 @@ public class ClientHttp {
 
     public static void main(String args[]) throws IOException, ClassNotFoundException {
         ConnectionHandler connection = new ConnectionHandler("http://localhost:8000/test");
-        Map<String, String> params = new HashMap<String,String>();
+        BufferedReader commandInput = new BufferedReader(new InputStreamReader(System.in));
 
+        
+        while (true) {
+            String username = getCommand(commandInput, "Podaj nazwę użytkownika: ");
+            String password = getCommand(commandInput, "Podaj hasło: ");
+            Map<String, String> login = new HashMap<>();
+            login.put(username, password);
+            connection.establishConnection(login, Method.POST);
+            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+            out.writeBytes(ConnectionHandler.getParamsString(login));
+            out.flush();
+            if(connection.getResponseCode() == 200) break;
+        }
+
+        Map<String, String> params = new HashMap<String,String>();
         HashMap<Integer, Book>  booksDictionary = null;
+
+
+
         params.put("command", "all");
-        connection.establishConnection(params);
+        connection.establishConnection(params, Method.GET);
         if (connection.getResponseCode() != 200) System.out.println("WARNING: Cannot connect to the books database. Starting system with empty database.");
         else booksDictionary = connection.responseObject();
 
 
-        BufferedReader commandInput = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
-        String commandPrompt = ">>";
         String startMessage = "Library Management System (LMS) v2.0\n" +
                 "type help to display the list of commands";
 
         System.out.println(startMessage);
         while (true) {
-            command = getCommand(commandInput, commandPrompt);
+            command = getCommand(commandInput, COMMAND_PROMPT);
             params.put("command", command);
-            connection.establishConnection(params);
+            connection.establishConnection(params, Method.GET);
             if (connection.getResponseCode() != 200) break;
 
             if (command.equals("exit")) {
@@ -68,8 +86,7 @@ public class ClientHttp {
                     Printing.printBooks((HashMap<Integer, Book>) connection.responseObject());
                 } else {
                     try {
-                    booksDictionary = connection.responseObject();
-                        
+                        booksDictionary = connection.responseObject();
                     } catch (EOFException e) {
                         System.out.println("WARNING: No command " + command);
                     }

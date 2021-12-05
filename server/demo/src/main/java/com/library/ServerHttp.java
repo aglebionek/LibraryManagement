@@ -2,8 +2,10 @@ package com.library;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -41,7 +43,8 @@ public class ServerHttp {
     
     private static final String METHOD_GET = "GET";
     private static final String METHOD_OPTIONS = "OPTIONS";
-    private static final String ALLOWED_METHODS = METHOD_GET + "," + METHOD_OPTIONS;
+    private static final String METHOD_POST = "POST";
+    private static final String ALLOWED_METHODS = METHOD_GET + "," + METHOD_OPTIONS + "," + METHOD_POST;
 
     private static String commandsFilename = "commands";
     private static String commands = "";
@@ -49,6 +52,8 @@ public class ServerHttp {
     private static final DatabaseType DATABASE_TYPE = DatabaseType.json;
     private static HashMap<Integer, Book> booksDictionary = new HashMap<>();
     private static int highestBookId = 0;
+
+    private static HashMap<String, HashMap<Integer, Book>> user = new HashMap<>();
 
 
     public static void main(String[] args) throws Exception {
@@ -66,13 +71,23 @@ public class ServerHttp {
         public void handle(final HttpExchange httpExchange) throws IOException {
             final String requestMethod = httpExchange.getRequestMethod().toUpperCase();
             final OutputStream out = httpExchange.getResponseBody();
+            final InputStream in = httpExchange.getRequestBody();
+
+            byte[] response = {};
+
 
             switch (requestMethod) {
+                case METHOD_POST:
+                    DataInputStream dataInputStream = new DataInputStream(in);
+                    byte[] bytes = dataInputStream.readAllBytes();
+                    String str = new String(bytes);
+                    System.out.println(str);
+                    response = "Post recieved succesfully.".getBytes();
+                    break;
 
                 case METHOD_GET:
                     final Map<String, List<String>> requestParameters = getRequestParameters(httpExchange.getRequestURI());
                     String command = "";
-                    byte[] response = {};
                     try {
                         command = requestParameters.get("command").get(0);
                     } catch (NullPointerException e) {
@@ -157,12 +172,10 @@ public class ServerHttp {
                             }
                             if (success) response = setObjectAsResponse(booksDictionary);
                         }
-                    
-
-                    httpExchange.sendResponseHeaders(STATUS_OK, response.length);
-                    out.write(response);
-                    out.close();
             }
+            httpExchange.sendResponseHeaders(STATUS_OK, response.length);
+            out.write(response);
+            out.close();
         }
     }
 
