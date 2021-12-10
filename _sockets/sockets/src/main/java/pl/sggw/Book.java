@@ -4,29 +4,27 @@ import java.io.Serializable;
 
 public class Book implements Serializable {
     private String title;
-    private String author;
-    private String publisher;
+    private String authorName;
+    private String authorSurname;
     private int id;
-    public BookStatus status;
 
-    public Book(String _title, String _author, String _publisher, int _id, BookStatus _status) {
-        title = _title.toUpperCase();
-        author = _author.toUpperCase();
-        publisher = _publisher.toUpperCase();
+    public Book(String _title, String _authorName, String _authorSurname, int _id) {
+        title = _title;
+        authorName = _authorName;
+        authorSurname = _authorSurname;
         id = _id;
-        status = _status;
     }
 
     public String getTitle() {
         return title;
     } 
 
-    public String getAuthor() {
-        return author;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getAuthorSurname() {
+        return authorSurname;
     }
 
     public int getId() {
@@ -34,7 +32,7 @@ public class Book implements Serializable {
     }
 
     public String toString() {
-        return String.format("[%d] ", id) + getTitle() + ", " + getAuthor() + ", " + getPublisher() + ", " + this.status;
+        return String.format("[%d] ", id) + getTitle() + ", " + getAuthorName() + ", " + getAuthorSurname();
     }
 
 }
