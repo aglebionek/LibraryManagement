@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RouteHandler {
     public static String returnViewForRoute(String method, String route, ConcurrentHashMap<Integer, Book> booksDictionary) throws FileNotFoundException {
         String view = ReadingViews.defaultView();
+        if(route.equals("favicon.ico")) return view;
         if(route.isEmpty()) {
             return view;
         }
@@ -14,6 +15,8 @@ public class RouteHandler {
             try {
                 view = ReadingViews.fromFile(route);
             } catch (Exception e) {
+                System.out.println(route);
+                e.printStackTrace();
                 System.out.println("No such view, returning default view.");
                 return view;
             }

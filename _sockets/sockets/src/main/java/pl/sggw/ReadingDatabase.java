@@ -39,14 +39,15 @@ public class ReadingDatabase {
             keyValuePair = entry.trim().split(":", 2);
             //printArray(keyValuePair);
             id = Integer.parseInt(keyValuePair[0].substring(1, keyValuePair[0].length() - 1));
-            bookData = keyValuePair[1].trim().substring(1, keyValuePair[1].length() - 1);
+            bookData = keyValuePair[1].trim().substring(1, keyValuePair[1].length() - 2);
             //System.out.println(bookData);
             bookProperties = bookData.trim().split(",");
             //System.out.println("properties");
             //printArray(bookProperties);
             int i = 0;
             for (String string : bookProperties) {
-                bookValues[i] = string.split(":")[1].trim();
+                String value = string.split(":")[1];
+                bookValues[i] = value.trim().substring(1, value.length() - 2);
                 i++;
             }
             //System.out.println("values" + bookValues);
