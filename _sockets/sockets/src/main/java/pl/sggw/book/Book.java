@@ -1,4 +1,4 @@
-package pl.sggw;
+package pl.sggw.book;
 
 import java.io.Serializable;
 
@@ -6,13 +6,11 @@ public class Book implements Serializable {
     private String title;
     private String authorName;
     private String authorSurname;
-    private int id;
 
-    public Book(String _title, String _authorName, String _authorSurname, int _id) {
+    public Book(String _title, String _authorName, String _authorSurname) {
         title = _title;
         authorName = _authorName;
         authorSurname = _authorSurname;
-        id = _id;
     }
 
     public String getTitle() {
@@ -27,12 +25,8 @@ public class Book implements Serializable {
         return authorSurname;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String toString() {
-        return String.format("[%d] ", id) + getTitle() + ", " + getAuthorName() + ", " + getAuthorSurname();
+        return getTitle() + ", " + getAuthorName() + ", " + getAuthorSurname();
     }
 
 }

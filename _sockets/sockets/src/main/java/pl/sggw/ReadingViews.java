@@ -7,14 +7,14 @@ import java.util.Scanner;
 public class ReadingViews {
     private static final String DEFAULT_VIEW_FILE = "default.html";
     public static String fromFile(String path) throws FileNotFoundException {
-        String websiteString = "";
+        String htmlString = "";
         File websiteFile = new File(path);
         Scanner websiteScanner = new Scanner(websiteFile);
         while (websiteScanner.hasNextLine()) {
-            websiteString += websiteScanner.nextLine();
+            htmlString += websiteScanner.nextLine();
         }
         websiteScanner.close();
-        return websiteString;
+        return htmlString;
     }
 
     public static String defaultView() throws FileNotFoundException {
