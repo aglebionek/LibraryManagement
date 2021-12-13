@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class ReadingViews {
+public class ViewsReader {
     private static final String DEFAULT_VIEW_FILE = "default.html";
     public static String fromFile(String path) throws FileNotFoundException {
         String htmlString = "";

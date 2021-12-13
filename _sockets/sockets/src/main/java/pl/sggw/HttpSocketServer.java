@@ -1,26 +1,17 @@
 package pl.sggw;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import pl.sggw.book.Book;
 import pl.sggw.database.Deserialize;
-import pl.sggw.database.Serialize;
 
 public class HttpSocketServer {
     private static final String REQUEST_METHOD_HEADER_KEY = "Method";
@@ -75,13 +66,13 @@ public class HttpSocketServer {
 
     private static void newClientThread(Socket client) throws IOException {
         PrintWriter out = new PrintWriter(client.getOutputStream());
-        HashMap<String, String> requestHeaders = RequestHandler.Parser.getRequestHeaders(client.getInputStream());
+        HashMap<String, String> requestHeaders = RequestHandler.returnRequestHeaders(client.getInputStream());
 
         String method = requestHeaders.get(REQUEST_METHOD_HEADER_KEY);
         String route = requestHeaders.get(REQUEST_URL_HEADER_KEY);
 
         if (method.toUpperCase().equals("POST")) {
-            HashMap<String, String> requestBody = RequestHandler.Parser.getRequestBody(requestHeaders.get(REQUEST_BODY_KEY));
+            HashMap<String, String> requestBody = RequestHandler.returnRequestBody(requestHeaders.get(REQUEST_BODY_KEY));
             Debugging.printHashMapToConsole(requestBody);
             responseView = RequestHandler.Post.returnViewForRoute(route, requestBody, booksDictionary);
         } else if (method.toUpperCase().equals("GET")) {
